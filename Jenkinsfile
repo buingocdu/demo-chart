@@ -26,7 +26,7 @@ pipeline {
 
     stage('Lưu dist làm artifact') {
       steps {
-        archiveArtifacts artifacts: 'dist/**', fingerprint: true
+        archiveArtifacts artifacts: 'build/**', fingerprint: true
       }
     }
   }
