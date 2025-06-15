@@ -2,28 +2,25 @@ pipeline {
   agent any
 
   stages {
-    stage('⚙ Test Stage') {
+    stage('Kiểm tra') {
       steps {
-        echo 'Jenkins đang chạy đúng pipeline'
+        echo '✅ Pipeline đang hoạt động'
       }
     }
 
-    stage('Run inside NodeJS container') {
-      steps {
-        script {
-          docker.image('node:18').inside {
-            sh 'node -v'
-            sh 'npm -v'
-            sh 'npm install'
-            sh 'npm run build'
-
-            echo "📁 Kiểm tra thư mục dist:"
-            sh 'ls -al dist || echo "dist not found"'
-
-            // Lưu artifact ra ngoài container
-            sh 'cp -r dist $WORKSPACE/'
-          }
+    stage('Build trong container NodeJS') {
+      agent {
+        docker {
+          image 'node:18'
         }
+      }
+      steps {
+        sh 'node -v'
+        sh 'npm -v'
+        sh 'npm install'
+        sh 'npm run build'
+        echo "📁 Kiểm tra thư mục dist:"
+        sh 'ls -al dist || echo "dist not found"'
       }
     }
 
