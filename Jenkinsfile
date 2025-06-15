@@ -20,7 +20,7 @@ pipeline {
         sh 'npm install --legacy-peer-deps'
         sh 'CI=false npm run build'
         echo "📁 Kiểm tra thư mục dist:"
-        sh 'ls -al dist || echo "dist not found"'
+        sh 'ls -al build || echo "build not found"'
       }
     }
 
