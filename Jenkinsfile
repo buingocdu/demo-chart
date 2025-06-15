@@ -1,35 +1,30 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18'
-        }
-    }
+  agent any
 
-    stages {
-
-        stage('Install dependencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
-
-        stage('Build project') {
-            steps {
-                sh 'npm run build'
-            }
-        }
-
-        stage('Check Dist') {
+  stages {
+    stage('Run inside NodeJS container') {
       steps {
-        sh 'ls -al'
-        sh 'ls -al dist || echo "dist not found"'
+        script {
+          docker.image('node:18').inside {
+            sh 'node -v'
+            sh 'npm -v'
+            sh 'npm install'
+            sh 'npm run build'
+
+            echo "📁 Kiểm tra thư mục dist:"
+            sh 'ls -al dist || echo "dist not found"'
+
+            // Lưu artifact ra ngoài container
+            sh 'cp -r dist $WORKSPACE/' 
+          }
+        }
       }
     }
 
-    stage('Archive') {
+    stage('Lưu dist làm artifact') {
       steps {
         archiveArtifacts artifacts: 'dist/**', fingerprint: true
       }
     }
-    }
+  }
 }
