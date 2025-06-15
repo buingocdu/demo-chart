@@ -1,24 +1,32 @@
 import logo from './logo.svg';
 import './App.css';
+import MixedChart from './MixedChart';
+import LoginGoogle from './LoginGoogle';
+import { GoogleLogin } from '@react-oauth/google';
+import FacebookLogin from 'react-facebook-login';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <GoogleLogin
+      onSuccess={credentialResponse => {
+        console.log(credentialResponse);
+      }}
+      onError={() => {
+        console.log('Login Failed');
+      }}
+    />
+    <FacebookLogin
+    appId="500238265711320"
+    autoLoad={true}
+    fields="name,email,picture"
+    callback={credentialResponse => {
+      console.log(credentialResponse);
+    }}
+    icon="fa-facebook"
+  />
+    </>
+    
   );
 }
 
