@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  environment {
+    DEPLOY_DIR = 'D:\\WORKING\\ww\\my-react-app'
+  }
+
   stages {
     stage('Kiểm tra') {
       steps {
@@ -21,23 +25,25 @@ pipeline {
         sh 'CI=false npm run build'
         echo "📁 Kiểm tra thư mục build:"
         sh 'ls -al build || echo "build not found"'
-
-        // 🔐 Lưu thư mục build vào stash
-        stash includes: 'build/**', name: 'react-build'
       }
     }
 
-    stage('Copy build to main workspace') {
+    stage('Copy build vào thư mục deploy trên Windows') {
       steps {
-        // 📥 Lấy lại build từ stash
-        unstash 'react-build'
-        sh 'ls -al build'
+        // Sử dụng bat thay vì sh cho Windows
+        bat """
+        if exist "%DEPLOY_DIR%" (
+          rmdir /s /q "%DEPLOY_DIR%"
+        )
+        mkdir "%DEPLOY_DIR%"
+        xcopy /E /I /Y build "%DEPLOY_DIR%"
+        """
       }
     }
 
-    stage('Lưu dist làm artifact') {
+    stage('Thông báo hoàn thành') {
       steps {
-        archiveArtifacts artifacts: 'build/**', fingerprint: true
+        echo "✅ Đã deploy thành công! Mở http://localhost:3000/ để xem kết quả."
       }
     }
   }
