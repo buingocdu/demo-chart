@@ -19,10 +19,17 @@ pipeline {
             }
         }
 
-        stage('Archive artifacts') {
-            steps {
-                archiveArtifacts artifacts: 'dist/**', fingerprint: true
-            }
-        }
+        stage('Check Dist') {
+      steps {
+        sh 'ls -al'
+        sh 'ls -al dist || echo "dist not found"'
+      }
+    }
+
+    stage('Archive') {
+      steps {
+        archiveArtifacts artifacts: 'dist/**', fingerprint: true
+      }
+    }
     }
 }
