@@ -6,8 +6,10 @@ pipeline {
     }
 
     stages {
-        stage('Install dependencies') {
+        stage('Install Node/NPM manually') {
             steps {
+                sh 'node -v'
+                sh 'npm -v'
                 sh 'npm install'
             }
         }
