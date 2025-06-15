@@ -23,6 +23,11 @@ pipeline {
         sh 'ls -al build || echo "build not found"'
       }
     }
+    stage('Copy build to main workspace') {
+      steps {
+        sh 'cp -r build ../build'
+      }
+    }
 
     stage('Lưu dist làm artifact') {
       steps {
