@@ -19,13 +19,19 @@ pipeline {
         sh 'npm -v'
         sh 'npm install --legacy-peer-deps'
         sh 'CI=false npm run build'
-        echo "📁 Kiểm tra thư mục dist:"
+        echo "📁 Kiểm tra thư mục build:"
         sh 'ls -al build || echo "build not found"'
+
+        // 🔐 Lưu thư mục build vào stash
+        stash includes: 'build/**', name: 'react-build'
       }
     }
+
     stage('Copy build to main workspace') {
       steps {
-        sh 'cp -r build ../build'
+        // 📥 Lấy lại build từ stash
+        unstash 'react-build'
+        sh 'ls -al build'
       }
     }
 
