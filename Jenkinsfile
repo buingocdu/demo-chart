@@ -1,6 +1,13 @@
 pipeline {
   agent any
+
   stages {
+    stage('⚙ Test Stage') {
+      steps {
+        echo 'Jenkins đang chạy đúng pipeline'
+      }
+    }
+
     stage('Run inside NodeJS container') {
       steps {
         script {
@@ -14,7 +21,7 @@ pipeline {
             sh 'ls -al dist || echo "dist not found"'
 
             // Lưu artifact ra ngoài container
-            sh 'cp -r dist $WORKSPACE/' 
+            sh 'cp -r dist $WORKSPACE/'
           }
         }
       }
