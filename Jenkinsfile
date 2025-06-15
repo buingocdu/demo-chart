@@ -1,6 +1,5 @@
 pipeline {
   agent any
-
   stages {
     stage('Run inside NodeJS container') {
       steps {
